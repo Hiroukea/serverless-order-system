@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <button onclick="testPost()">Test POST /orders</button>
+    <button onclick="testGet()">Test GET /orders/123</button>
+
+    <pre id="out"></pre>
+
+    <script>
+      const API = "https://hlbbifugvi.execute-api.us-east-2.amazonaws.com";
+
+      function show(x) {
+        document.getElementById("out").textContent =
+          typeof x === "string" ? x : JSON.stringify(x, null, 2);
+      }
+
+      async function testPost() {
+        try {
+          const res = await fetch(`${API}/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderId: "123", item: "pizza", qty: 1 })
+          });
+          const text = await res.text();
+          show(`Status: ${res.status}\n\n${text}`);
+        } catch (e) {
+          show("POST error: " + e);
+        }
+      }
+
+      async function testGet() {
+        try {
+          const res = await fetch(`${API}/orders/123`);
+          const text = await res.text();
+          show(`Status: ${res.status}\n\n${text}`);
+        } catch (e) {
+          show("GET error: " + e);
+        }
+      }
+    </script>
+  </body>
+</html>
